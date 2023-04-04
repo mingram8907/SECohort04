@@ -1,20 +1,45 @@
-
 import './App.css';
 
-function Homepage() {
-  return (
-    <div>
-      <h1>Hi, I'm Myron Ingram</h1>
-      <h2>I'm a new software engineer that welcomes challenges and delivers solutions.</h2>
-    </div>
-  )
-}
+import { Routes, Route} from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { getMovie } from './services/omdbapi'
+
+
+import Homepage from './components/Homepage';
+import About from './components/About';
+import Projects from './components/Projects';
+import NavBar from './components/NavBar';
+import Footer from './components/Footer';
+import Form from './components/Form';
+import MovieDisplay from './components/MovieDisplay';
+
 
 function App() {
+  const [movie, setMovie] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getMovie('Major Payne');
+      console.log(data);
+      setMovie(data)
+    };
+    fetchData();
+  }, [])
+
   return (
-    <div className="App">
-      <Homepage />
-    </div>
+    
+      <div>
+        <NavBar />
+        <div>
+          <Homepage /> 
+          <About />
+          <Projects />
+            <Form movieSearch={getMovie} setMovie={setMovie}/>
+            <MovieDisplay movie={movie}/>
+        </div>
+        <Footer />
+      </div>
+  
   );
 }
 
